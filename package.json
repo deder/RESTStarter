@@ -1,0 +1,23 @@
+{
+  "name": "reststarter",
+  "version": "1.0.0",
+  "description": "Ce projet a pour but de creer un starter pour mes projets REST.\r Aujourd'hui, j'utilise une mixture contenant les substances suivante :",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deder/restStarter.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/deder/restStarter/issues"
+  },
+  "homepage": "https://github.com/deder/restStarter#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
