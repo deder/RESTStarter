@@ -1,9 +1,16 @@
 /**
  * Import des packages
  */
+
+const dbConfig = require('./config/dbConfig');
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose   = require('mongoose');
 
+/**
+ * Configuration au server mongoDB
+ */
+mongoose.connect(`${dbConfig.protocol}://${dbConfig.login}:${dbConfig.mdp}@${dbConfig.url}/demo`);
 /**
  * Instanciation de express pour creer notre application
  */
