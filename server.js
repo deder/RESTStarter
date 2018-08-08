@@ -19,18 +19,25 @@ const port = process.env.PORT || 3000;
 /**
  * Instanciation d'un router express pour la gestion de notre API
  */
-const routerApi = express.Router(); 
+const routerAPI = express.Router(); 
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-routerApi.get('/', (req, res) => {
+routerAPI.get('/', (req, res) => {
     res.json({ message: 'Ma premiere page' });
 });
 
-app.use('/api', routerApi);
 
+/**
+ * Liaison de la route api avec le routerAPI
+ */
+app.use('/api', routerAPI);
+
+/**
+ * Ecoute de l'application sur le port défini dans la constante port
+ */
 app.listen(port, () => {
     console.log(`Ecoute sur le port ${port}`)
 })
