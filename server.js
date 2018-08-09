@@ -14,8 +14,8 @@ const Item = require('./models/item');
 /**
  * Configuration au server mongoDB
  */
-const connectUrlMongoose = `${dbConfig.protocol}://${dbConfig.login}:${dbConfig.mdp}@${dbConfig.url}/demo`;
-mongoose.connect("mongodb://admin:dbpassword2010@ds217092.mlab.com:17092/demo", { useNewUrlParser: true });
+const connectUrlMongoose = `${dbConfig.protocol}://${dbConfig.login}:${dbConfig.mdp}@${dbConfig.url}/${dbConfig.name}`;
+mongoose.connect(connectUrlMongoose, { useNewUrlParser: true });
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Erreur de connection à la BDD'));
