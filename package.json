@@ -1,0 +1,32 @@
+{
+  "name": "reststarter",
+  "version": "1.0.0",
+  "description": "Ce projet a pour but de creer un starter pour mes projets REST.\r Aujourd'hui, j'utilise une mixture contenant les substances suivante :",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node_modules/.bin/nodemon",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deder/restStarter.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/deder/restStarter/issues"
+  },
+  "homepage": "https://github.com/deder/restStarter#readme",
+  "dependencies": {
+    "bcrypt": "^3.0.0",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "jsonwebtoken": "^8.3.0",
+    "mongoose": "^5.2.7",
+    "morgan": "^1.9.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.3"
+  }
+}
