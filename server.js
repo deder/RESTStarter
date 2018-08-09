@@ -1,7 +1,7 @@
 /**
  * Import des packages
  */
-const dbConfig = require('./config/db.conf')();
+const dbConfig = require('./config/db.conf');
 const serverConfig = require('./config/server.conf');
 const express = require('express');
 const bodyParser = require('body-parser');
