@@ -47,7 +47,6 @@ routerAPI.get('/', (req, res) => {
 /**
  * Ajout de route à routerAPI
  */
-
 routerAPI.route('/items')
     .post((req, res) => {
         var item = new Item();
@@ -67,6 +66,40 @@ routerAPI.route('/items')
             res.json(item);
         });
     });
+
+routerAPI.route('/items/:item_id')
+    .get((req, res) => {
+        Item.findById(req.params.item_id, (err, item) => {
+            if (err) {
+                res.send(err)
+            }
+            res.json(item);
+        })
+    })
+    .put((req, res) => {
+        Item.findById(req.params.item_id, (err, item) => {
+            if (err){
+                res.send(err);
+            }
+            item.type = req.body.type;
+            item.save(function (err) {
+                if (err){
+                    res.send(err);
+                }
+                res.json({ message: `Item mis à jour ! ${item}` });
+            });
+
+        })
+    })
+    .delete((req, res) => {
+        Item.remove({_id: req.params.item_id}, (err, item)=>{
+            if(err){
+                res.send(err);
+            }
+            res.json({ message: `Item supprimé ! ${req.params.item_id}` })
+        });
+    })
+
 
 /**
  * Liaison de la route api avec le routerAPI
