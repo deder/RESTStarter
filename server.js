@@ -1,27 +1,26 @@
 /**
  * Import des packages
  */
-const dbConfig = require('./config/db.conf');
+const dbConfig = require('./config/db.conf')();
+const serverConfig = require('./config/server.conf');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 /**
- * Import des modeles de données
- */
-const Item = require('./models/item');
-
-/**
  * Configuration au server mongoDB
  */
-const connectUrlMongoose = `${dbConfig.protocol}://${dbConfig.login}:${dbConfig.mdp}@${dbConfig.url}/${dbConfig.name}`;
-mongoose.connect(connectUrlMongoose, { useNewUrlParser: true });
+mongoose.connect(dbConfig.connectUrl, { useNewUrlParser: true });
 
+/**
+ * Ecouteur lié à l'objet mongoose
+ */
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Erreur de connection à la BDD'));
 db.once('open', function () {
     console.log(`Connection à la BDD`);
 });
+
 /**
  * Instanciation de express pour creer notre application
  */
@@ -40,66 +39,12 @@ const routerAPI = express.Router();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-routerAPI.get('/', (req, res) => {
-    res.json({ message: 'Ceci ne fait pas partie de l\'API' });
-});
 
 /**
  * Ajout de route à routerAPI
  */
-routerAPI.route('/items')
-    .post((req, res) => {
-        var item = new Item();
-        item.type = req.body.type;
-        item.save((err) => {
-            if (err) {
-                res.send(err);
-            }
-            res.json({ message: `Item ajoutée ! ${item}` });
-        })
-    })
-    .get(function (req, res) {
-        Item.find(function (err, item) {
-            if (err) {
-                res.send(err);
-            }
-            res.json(item);
-        });
-    });
-
-routerAPI.route('/items/:item_id')
-    .get((req, res) => {
-        Item.findById(req.params.item_id, (err, item) => {
-            if (err) {
-                res.send(err)
-            }
-            res.json(item);
-        })
-    })
-    .put((req, res) => {
-        Item.findById(req.params.item_id, (err, item) => {
-            if (err){
-                res.send(err);
-            }
-            item.type = req.body.type;
-            item.save(function (err) {
-                if (err){
-                    res.send(err);
-                }
-                res.json({ message: `Item mis à jour ! ${item}` });
-            });
-
-        })
-    })
-    .delete((req, res) => {
-        Item.remove({_id: req.params.item_id}, (err, item)=>{
-            if(err){
-                res.send(err);
-            }
-            res.json({ message: `Item supprimé ! ${req.params.item_id}` })
-        });
-    })
-
+require("./routes/api/api.route")(routerAPI);
+require("./routes/api/items.route")(routerAPI);
 
 /**
  * Liaison de la route api avec le routerAPI
@@ -109,6 +54,6 @@ app.use('/api', routerAPI);
 /**
  * Ecoute de l'application sur le port défini dans la constante port
  */
-app.listen(port, () => {
-    console.log(`Ecoute sur le port ${port}`)
+app.listen(serverConfig.port, () => {
+    console.log(`Ecoute sur le port ${serverConfig.port}`)
 })
