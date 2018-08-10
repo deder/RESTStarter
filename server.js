@@ -45,7 +45,7 @@ app.use(bodyParser.json());
  */
 require("./routes/api/api.route")(routerAPI);
 require("./routes/api/items.route")(routerAPI);
-
+require("./routes/api/users.route")(routerAPI);
 /**
  * Liaison de la route api avec le routerAPI
  */
