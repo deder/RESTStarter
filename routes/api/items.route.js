@@ -4,7 +4,7 @@
 const Item = require('../../models/item');
 
 module.exports = function (routerAPI) {
-    return routerAPI.route('/items')
+    routerAPI.route('/items')
         .post((req, res) => {
             var item = new Item();
             item.type = req.body.type;
@@ -12,7 +12,7 @@ module.exports = function (routerAPI) {
                 if (err) {
                     res.send(err);
                 }
-                res.json({ message: `Item ajoutée ! ${item}` });
+                res.json({ success: true });
             })
         })
         .get(function (req, res) {
@@ -23,7 +23,6 @@ module.exports = function (routerAPI) {
                 res.json(item);
             });
         });
-
     routerAPI.route('/items/:item_id')
         .get((req, res) => {
             Item.findById(req.params.item_id, (err, item) => {
@@ -43,7 +42,7 @@ module.exports = function (routerAPI) {
                     if (err) {
                         res.send(err);
                     }
-                    res.json({ message: `Item mis à jour ! ${item}` });
+                    res.json({ success: true });
                 });
 
             })
@@ -53,7 +52,7 @@ module.exports = function (routerAPI) {
                 if (err) {
                     res.send(err);
                 }
-                res.json({ message: `Item supprimé ! ${req.params.item_id}` })
+                res.json({ success: true })
             });
         })
 }
