@@ -6,8 +6,9 @@ const serverConfig = require('./config/server.conf');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-var morgan = require('morgan');
-var jwt = require('jsonwebtoken');
+const morgan = require('morgan');
+const jwt = require('jsonwebtoken');
+const urlsSansToken = ['/auth'];
 /**
  * Instanciation de express pour creer notre application
  */
@@ -23,7 +24,7 @@ mongoose.connect(dbConfig.connectUrl, { useNewUrlParser: true });
 /**
  * Ecouteur lié à l'objet mongoose
  */
-var db = mongoose.connection;
+const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Erreur de connection à la BDD'));
 db.once('open', function () {
     console.log(`Connection à la BDD`);
@@ -47,6 +48,39 @@ const routerAPI = express.Router();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+// Virification du token
+routerAPI.use((req, res, next) =>{
+    if (urlsSansToken.indexOf(req.url) > -1) return next();
+        // check header or url parameters or post parameters for token
+        const token = req.body.token || req.query.token || req.headers['x-access-token'];
+    
+        // decode token
+        if (token) {
+    
+            // verifies secret and checks exp
+            jwt.verify(token, app.get('superSecret'), function (err, decoded) {
+                if (err) {
+                    return res.status(500).json({ 
+                        message: `Erreur d'authentification`
+                    });
+                } else {
+                    // if everything is good, save to request for use in other routes
+                    req.decoded = decoded;
+                    next();
+                }
+            });
+    
+        } else {
+    
+            // if there is no token
+            // return an error
+            return res.status(403).send({
+                message: `Erreur d'authentification`
+            });
+    
+        }
+    });
 
 
 /**
@@ -80,7 +114,7 @@ routerAPI.route('/auth')
                     const payload = {
                         admin: user.role
                     };
-                    var token = jwt.sign(payload, app.get('superSecret'), {
+                    const token = jwt.sign(payload, app.get('superSecret'), {
                         expiresIn: "2 days"
                     });
                     res.json({
